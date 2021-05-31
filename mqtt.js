@@ -59,8 +59,9 @@ function mqtt_messsageReceived(topic, message, packet) {
 	let frequency = stringRec[4];
 	let powerfactor = stringRec[5];
 	let topicInfo = topic.split("-")
+	//let collection = topicInfo[1]+topicInfo[2]
 	mongoc.connect(url, (error, client) => {
-		var myCol = client.db('mqttJS').collection('mqtt')
+		var myCol = client.db('mqttJS').collection('mqtts')
 		myCol.insertOne({
 			topic,
 			localIp: topicInfo[0],
