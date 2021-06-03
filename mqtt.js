@@ -1,9 +1,10 @@
 var mqtt = require('mqtt'); //https://www.npmjs.com/package/mqtt
 var Topic = '#'; //subscribe to all topics
-var Broker_URL = 'tcp://128.199.82.173';
+var Broker_URL = 'mqtt://128.199.82.173';
 var moment = require('moment')
+var genRandomString = "MQTT-" + genRandom(5);
 var options = {
-	clientId: 'MyMQTT',
+	clientId: genRandomString,
 	port: 1883,
 	//username: 'mqtt_user',
 	//password: 'mqtt_password',	
@@ -13,7 +14,6 @@ var options = {
 var mongo = require('mongodb')
 var mongoc = mongo.MongoClient
 var url = 'mongodb://mqtt:!mqtt@128.199.82.173:27017/mqttJS'
-
 
 var client = mqtt.connect(Broker_URL, options);
 client.on('connect', mqtt_connect);
@@ -75,7 +75,7 @@ function mqtt_messsageReceived(topic, message, packet) {
 			powerfactor,
 			date: moment().format()
 		}, () => {
-			console.log('Data is saved to mongoDB')
+			//console.log('Data is saved to mongoDB')
 			client.close()
 		})
 	})
@@ -84,3 +84,18 @@ function mqtt_messsageReceived(topic, message, packet) {
 function mqtt_close() {
 	console.log("Close MQTT");
 };
+
+function genRandom (numBytes)  {
+	let i = 0;
+	let letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+	let randString = "";
+	for (i = 0; i < numBytes; i++) {
+		randString = randString + random_item(letters);
+	}
+	return randString;
+}
+function random_item(items) {
+
+	return items[Math.floor(Math.random() * items.length)];
+
+}
