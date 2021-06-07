@@ -64,9 +64,6 @@ function mqtt_messsageReceived(topic, message, packet) {
 		var myCol = client.db('mqttJS').collection('mqtts')
 		myCol.insertOne({
 			topic,
-			localIp: topicInfo[0],
-			email: topicInfo[1],
-			randomString: topicInfo[2],
 			volt,
 			current,
 			power,
