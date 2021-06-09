@@ -52,29 +52,39 @@ function mqtt_messsageReceived(topic, message, packet) {
 	console.log(topic)
 	console.log(packet.payload.toString())
 	let stringRec = packet.payload.toString().split("-");
-	let volt = stringRec[0];
-	let current = stringRec[1];
-	let power = stringRec[2];
-	let energy = stringRec[3];
-	let frequency = stringRec[4];
-	let powerfactor = stringRec[5];
+	// let volt = stringRec[0];
+	// let current = stringRec[1];
+	// let power = stringRec[2];
+	// let energy = stringRec[3];
+	// let frequency = stringRec[4];
+	// let powerfactor = stringRec[5];
+	let volt = Number(stringRec[0]);
+	console.log(volt)
+	let current = Number(stringRec[1]);
+	let power = Number(stringRec[2]);
+	let energy = Number(stringRec[3]);
+	let frequency = Number(stringRec[4]);
+	let powerfactor = Number(stringRec[5]);
 	let topicInfo = topic.split("-")
 	//let collection = topicInfo[1]+topicInfo[2]
 	mongoc.connect(url, (error, client) => {
+
 		var myCol = client.db('mqttJS').collection('mqtts')
-		myCol.insertOne({
-			topic,
-			volt,
-			current,
-			power,
-			energy,
-			frequency,
-			powerfactor,
-			date: moment().format()
-		}, () => {
-			//console.log('Data is saved to mongoDB')
-			client.close()
-		})
+		if (volt && current && power && energy && frequency && powerfactor) {
+			myCol.insertOne({
+				topic,
+				volt,
+				current,
+				power,
+				energy,
+				frequency,
+				powerfactor,
+				date: new Date()
+			}, () => {
+				//console.log('Data is saved to mongoDB')
+				client.close()
+			})
+		}
 	})
 };
 
@@ -82,7 +92,7 @@ function mqtt_close() {
 	console.log("Close MQTT");
 };
 
-function genRandom (numBytes)  {
+function genRandom(numBytes) {
 	let i = 0;
 	let letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
 	let randString = "";
